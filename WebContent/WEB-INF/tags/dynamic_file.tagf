@@ -1,0 +1,4 @@
+<%@ tag pageEncoding="UTF-8" %>
+<% 
+ out.println("hello from dynamic_file.tagf,哈哈");
+%>

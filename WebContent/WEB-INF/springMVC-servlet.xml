@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+	   					   http://www.springframework.org/schema/beans/spring-beans.xsd"
+>
+	<!-- 声明两个控制器类,并分别映射在/product_input.action和/product_save.action-->
+	<bean name="/product_input.action" class="example17_springMVC.demo1.InputProductController"/>
+	<bean name="/product_save.action" class="example17_springMVC.demo1.SaveProductController"/>
+
+</beans>

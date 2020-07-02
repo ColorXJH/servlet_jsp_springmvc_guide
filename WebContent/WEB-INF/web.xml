@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+ http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+version="3.0">
+  <display-name>servlet_jsp_springmvc_guide</display-name>
+  <welcome-file-list>
+    <welcome-file>index</welcome-file><!-- 不要带后缀，不然会被当成静态资源，这时他将会称为url中的最后一部分/index,可能会被某个请求转发处理器拦击处理 -->
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>default.html</welcome-file>
+    <welcome-file>default.htm</welcome-file>
+    <welcome-file>default.jsp</welcome-file>
+  </welcome-file-list>
+ <error-page>
+  	<exception-type>java.lang.Exception</exception-type>
+  	<location>/jsp/example13/error-java-exception.html</location>
+  </error-page>
+  <error-page>
+  	<error-code>405</error-code>
+  	<location>/jsp/example13/error-code.html</location>
+  </error-page> 
+  <jsp-config>
+  	<taglib>
+  		<taglib-uri>
+  			http://brainysoftware.com/taglib/complex/xjh
+  		</taglib-uri>
+  		<taglib-location>
+  			/WEB-INF/mytags.tld
+  		</taglib-location>
+  	</taglib>
+  	<jsp-property-group>
+  		<url-pattern>/jsp/example12/*</url-pattern>
+		<el-ignored>true</el-ignored>
+  	</jsp-property-group>
+  	<jsp-property-group>
+  		<url-pattern>/jsp/example12/*</url-pattern>
+		<scripting-invalid>true</scripting-invalid>
+  	</jsp-property-group>
+  </jsp-config>
+  <security-constraint><!-- 不将资源放入web-inf，同样可以限制用户访问 ，可以配置多个 -->
+  	<web-resource-collection>
+  		<web-resource-name>JSP page</web-resource-name>
+  		<url-pattern>/jsp/*</url-pattern>
+  	</web-resource-collection>
+  	<auth-constraint></auth-constraint>
+  </security-constraint>
+  
+  <!--限定该包的servlet 只有如下权限才能访问  -->
+  <!-- <security-constraint>
+  	<web-resource-collection>
+  		<web-resource-name>Web Servlet</web-resource-name>
+  		<url-pattern>/asyncCompleteServlet</url-pattern>
+  	</web-resource-collection>
+  	<auth-constraint>
+  		<role-name>manager</role-name>
+  		<role-name>member</role-name>
+  	</auth-constraint>
+  </security-constraint> -->
+  <!--basic认证  -->
+  <!-- <login-config>
+  	 <auth-method>BASIC</auth-method>
+  	 <realm-name>Members Only</realm-name>
+  </login-config> -->
+  
+  <!-- basic访问认证-连接数据库 -->
+  <!-- <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Web Project Name</web-resource-name>
+            <url-pattern>/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>manager</role-name>
+        </auth-constraint>
+    </security-constraint>
+    <login-config>
+        <auth-method>BASIC</auth-method>
+        <realm-name>favourite basic realm</realm-name>
+    </login-config>
+    <security-role>
+        <role-name>manager</role-name>
+    </security-role> -->
+    
+    <!--DIGEST摘要访问认证   -->
+    <!-- <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Web Project Name</web-resource-name>
+            <url-pattern>/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>manager</role-name>
+        </auth-constraint>
+    </security-constraint>
+    <login-config>
+        <auth-method>DIGEST</auth-method>
+        <realm-name>favourite DIGEST realm</realm-name>
+    </login-config>
+    <security-role>
+        <role-name>manager</role-name>
+    </security-role> -->
+    
+    <!-- 基于form表单的登陆验证 -->
+    <!-- <security-constraint>
+    	<web-resource-collection>
+    		<web-resource-name>web form auth</web-resource-name>
+    		<url-pattern>/*</url-pattern>
+    	</web-resource-collection>
+    	<auth-constraint>
+    		<role-name>manager</role-name>这里是且的关系（&&），要同时满足多个角色
+    		<role-name>member</role-name>
+    	</auth-constraint>
+    </security-constraint>
+    <login-config>
+    	<auth-method>FORM</auth-method>
+    	<form-login-config>
+    		<form-login-page>/jsp/log-error/login.jsp</form-login-page>
+    		<form-error-page>/jsp/log-error/error.jsp</form-error-page>	
+    	</form-login-config>
+    </login-config> -->
+    
+    <!--基于注解的验证方式  -->
+    <!-- <login-config>
+    	<auth-method>FORM</auth-method>
+    	<form-login-config>
+    		<form-login-page>/jsp/log-error/login.jsp</form-login-page>
+    		<form-error-page>/jsp/log-error/error.jsp</form-error-page>	
+    	</form-login-config> 
+    </login-config> -->
+  <!-- <listener>
+    <listener-class>example08_minotor.ServletContextListenerImplXml</listener-class>
+  </listener> -->
+  <!-- <context-param>
+    <param-name>haha</param-name>
+    <param-value>index</param-value>
+  </context-param> -->
+   <!-- <servlet>
+    <servlet-name>NoAnnotationServlet</servlet-name>
+    <servlet-class>example01_servlets.NoAnnotationServlet</servlet-class>
+    <async-supported>true</async-supported>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>NoAnnotationServlet</servlet-name>
+    <url-pattern>/noannotationservlet</url-pattern>
+  </servlet-mapping> -->
+  
+  <!--第一个springMVC配置  -->
+  <servlet>
+  	<servlet-name>springMVC</servlet-name>
+  	<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+  	<!--注意这里没有显式配置spring的配置文件的加载位置，在默认情况下，会去web-inf目录下寻找servletName-servlet.xml配置文件==springMVC-servlet.xml -->
+  	
+  	<!--自定义配置文件的位置  -->
+  	<!--引用classpath路径下的文件，只需在文件名前加classpath:  -->
+  	<!--lib和classes同属classpath，两者的访问优先级为: lib>classes。  -->
+  	<!--WEB-INF/classes目录存放src目录java文件编译之后的class文件，xml、properties等资源配置文件，这是一个定位资源的入口。  -->
+  	<!--classpath是指WEB-INF文件夹下的classes目录。只会到你的class路径中查找找文件  -->
+  	<!--classpath*：不仅包含class路径，还包括jar文件中（class路径）进行查找。  -->
+  	<init-param>
+  		<param-name>contextConfigLocation</param-name>
+  		<param-value>classpath:spring-config.xml</param-value>
+  	</init-param>
+  	<load-on-startup>1</load-on-startup>
+  	<multipart-config>
+  		<max-file-size>20848820000</max-file-size>
+  		<max-request-size>418018841</max-request-size>
+  		<file-size-threshold>1048576</file-size-threshold>
+  	</multipart-config>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>springMVC</servlet-name>
+  	<!-- “/” 为将所有的url都映射到该servlet类 -->
+  	<!--意味着静态资源也会被映射到该servlet,为了正确处理静态资源，我们需要resources元素  -->
+  	<url-pattern>/</url-pattern>
+  </servlet-mapping>
+  
+  <!-- tomcat默认servlet，过滤请求，防止被spring的servlet处理了 ,注意程序中如果有保护静态资源的filter,需要先注释掉这些filter,因为filter比servlet先处理-->
+  <!--只能标识webcontent目录下的资源，不能访问src下的资源，所以不能使用classpath:形式，也不能使用/xxx/*.xml形式，只能用符合url-pattern格式的形式  -->
+  <!-- <servlet-mapping>
+  		<servlet-name>default</servlet-name>
+  		<url-pattern>*.jpg</url-pattern>ok 
+  		 <url-pattern>/resources/*</url-pattern>ok 
+  		 <url-pattern>/example18_base_on_annotation_controller/*.xml</url-pattern>error,这里不能使用带。xml后缀的形式，只能使用/xxx/*的形式
+  </servlet-mapping> -->
+</web-app>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+       <bean  name="personNoArgs" class="example15_springframework.Person"/>
+       <bean name="now" class="java.util.Date"/>
+       <!--字符串转换为时间:parse  -->
+       <bean id="dateFormat" class="java.text.SimpleDateFormat">
+        	<constructor-arg value="yyyy-MM-dd" />
+    	</bean> 
+    	<!--时间转换为字符串:format  -->
+    	<bean id="formatDate" class="java.text.SimpleDateFormat">
+    		<constructor-arg value="yyyy-MM-dd HH:mm:ss"/>
+    	</bean>
+    	<bean name="personConstructor" class="example15_springframework.Person">
+    		<constructor-arg name="name" value="XJH"/>
+    		<constructor-arg name="age" value="26"/>
+    		<constructor-arg name="birthday" ref="now"/>
+    	</bean>
+    	<bean name="personConstructorIndex" class="example15_springframework.Person">
+    		<constructor-arg index="0" value="XJH"/>
+    		<constructor-arg index="1" value="26"/>
+    		<constructor-arg index="2" ref="now"/>
+    	</bean>
+    	<bean name="personRef" class="example15_springframework.Person">
+    		<property name="name" value="XJH"/>
+    		<property name="age" value="26"/>
+    		<property name="birthday" ref="now"/>
+    	</bean>
+       <bean name="personWithArgs" class="example15_springframework.Person1">
+       		<property name="name" value="XJH"/>
+       		<property name="age" value="26"/>
+       		<property name="birthday">
+       			<bean factory-bean="formatDate" factory-method="format">
+       				<constructor-arg ref="now"/>
+       			</bean>
+       		</property>
+       </bean>
+       <!--有这种初始化转换的不能使用构造器注入，只能使用setter注入  -->
+       <bean name="personNoConstructor" class="example15_springframework.Person">
+       		<property name="name" value="XJH"/>
+       		<property name="age" value="26"/>
+       		<property name="birthday">
+       			<bean factory-bean="dateFormat" factory-method="parse">
+       				<constructor-arg value="1994-03-16"/>
+       			</bean>
+       		</property>
+       </bean>
+</beans>

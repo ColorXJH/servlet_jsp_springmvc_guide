@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee web-jsptaglibrary_2_1.xsd"
+    version="2.1">
+    
+    <description>
+    	simple tag example
+    </description>
+    <tlib-version>1.0</tlib-version>
+    <uri>http://example.com/taglib/function</uri>
+    <short-name>my first tag example</short-name>
+    <tag>
+    	<name>firstTag</name>
+    	<tag-class>example06_customize_tag.MyFirstTag</tag-class>
+    	<body-content>empty</body-content>
+    </tag>
+    <tag>
+    	<name>dateFormater</name>
+    	<tag-class>example06_customize_tag.DateFormaterTag</tag-class>
+    	<body-content>empty</body-content>
+    	<attribute>
+    		<name>header</name>
+    		<required>true</required>
+    	</attribute>
+    	<attribute>
+    		<name>items</name>
+    		<required>true</required>
+    	</attribute>
+    </tag>
+    <tag>
+    	<name>select</name>
+    	<tag-class>example06_customize_tag.SelectElementTag</tag-class>
+    	<body-content>scriptless</body-content>
+    </tag>
+    
+    <function>
+    	<description>reverse a string</description>
+    	<name>reverseStringA</name>
+    	<function-class>example06_customize_tag.StringFunctions</function-class>
+    	<function-signature>
+    		java.lang.String reverseString(java.lang.String)
+    	</function-signature>
+    </function>
+</taglib>

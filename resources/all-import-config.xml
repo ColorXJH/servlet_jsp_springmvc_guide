@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+	   					   http://www.springframework.org/schema/beans/spring-beans.xsd"
+>
+	<!--通过执行器辅助类的静态方法newCachedThreadPool生成一个执行器服务（ExcutorService）,在销毁executorService实例前会调用该类的shutdown方法  -->
+	<bean id="executorService" class="java.util.concurrent.Executors" factory-method="newCachedThreadPool" destroy-method="shutdown"/>	
+
+	<import resource="config1.xml"/>
+	<import resource="config2.xml"/>
+</beans>

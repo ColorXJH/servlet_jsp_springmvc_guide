@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:mvc="http://www.springframework.org/schema/mvc"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+	   					   http://www.springframework.org/schema/beans/spring-beans.xsd
+	   					   http://www.springframework.org/schema/context
+	   					   http://www.springframework.org/schema/context/spring-context.xsd
+	   					   http://www.springframework.org/schema/mvc
+	   					   http://www.springframework.org/schema/mvc/spring-mvc.xsd
+">	
+	<!--如果没有mvc:annotation-driven,使用mvc:resources元素会阻止任意控制器被调用，若不需要使用resources,则不需要使用annotation-driven元素  -->
+	<mvc:annotation-driven conversion-service="formatterService"/><!-- conversion-service为转换器的属性 -->
+	
+	<!-- 完整的包 -->
+	<!-- <context:component-scan base-package="com.test" /> -->
+	<!-- 使用通配符，只能匹配 com.a.test 无法匹配 com.a.b.test -->
+	<!-- <context:component-scan base-package="com.*.test" /> -->
+	<!-- 使用通配符， 可以匹配 com.a.b.test 和com.a.test -->
+	<!-- <context:component-scan base-package="com.**.test" /> -->
+	<!-- 使用占位符-->
+	<!-- <context:component-scan base-package="com.${test}.test" /> -->
+
+	<context:component-scan base-package="example18_base_on_annotation_controller.controller,example18_base_on_annotation_controller.service,example21_validator.controller"/>
+	<context:component-scan base-package="example22_i18n.controller,example23_file_upload.controller,example24_file_download.controller"/><!--注意不能写道具体的类名，识别不出来  -->
+	<!--webcontent目录下的resources  -->
+	<mvc:resources location="/resources/" mapping="/resources/**"/><!--webcontent目录下，配置图片可见，不经过DispatcherServlet处理  -->
+	<mvc:resources location="/css/" mapping="/css/**"/>
+	<mvc:resources location="/images/" mapping="/images/**"></mvc:resources>
+	<!-- <mvc:default-servlet-handler/> --><!--过滤webcontent下的resources/resource目录  -->
+	<!-- <mvc:resources location="classpath:/example18_base_on_annotation_controller/*.xml" mapping="/example18_base_on_annotation_controller/**"/> --><!--location中还可以书写classpath:这样就可以包含src目录中的源文件(源文件被编译后在classpath路径下(一般为lib,classpath))  -->
+		
+	<!-- 声明两个控制器类,并分别映射在/product_input.action和/product_save.action-->
+	<!-- <bean name="/product_input.action" class="example17_springMVC.demo1.InputProductController"/>
+	<bean name="/product_save.action" class="example17_springMVC.demo1.SaveProductController"/> -->
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/jsp/"/>
+		<property name="suffix" value=".jsp"/>
+	</bean>
+	
+	<!--自定义转换器  -->
+	<!-- <bean id="converterService" class="org.springframework.context.support.ConversionServiceFactoryBean">
+		<property name="converters">
+			这里定义所有的自定义converter 
+			<list>
+				<bean class="example20_converter_and_formatter.MyConverter">
+					<constructor-arg type="java.lang.String" value="yyyy-MM-dd"/>
+				</bean>
+			</list>
+		</property>
+	</bean> -->
+	
+	<!-- 自定义格式器，在web层中，一般用他来代替converter-->
+	<context:component-scan base-package="example20_converter_and_formatter.DateFormatter"/>
+	<bean id="formatterService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+		<!-- <property name="formatters">
+			<set>
+				<bean class="example20_converter_and_formatter.DateFormatter">
+					<constructor-arg type="java.lang.String" value="yyyy-MM-dd"/>
+				</bean> 
+			</set>
+		</property> -->
+		<!--上下两个都可以  -->
+		<property name="formatterRegistrars">
+			<set>
+				<bean class="example20_converter_and_formatter.MyRegistrar">
+					<constructor-arg type="java.lang.String" value="yyyy-MM-dd"/>
+				</bean>
+			</set>
+		</property>
+		<!-- <property name="converters">
+			<list>
+				<bean class="example20_converter_and_formatter.MyConverter" >
+					<constructor-arg type="java.lang.String" value="yyyy-MM-dd"/>
+				</bean>
+			</list>
+		</property> -->
+	</bean>
+	<!--定义消息源文件读取以及国际化文件读取位置 ReloadableResourceBundleMessageSource在应用程序目录下搜索属性文件，ResourceBundleMessageSource在类路径下搜索属性文件 -->
+	<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<property name="basenames">
+			<list>
+				<value>/WEB-INF/resource/messages</value>
+				<value>/WEB-INF/resource/showLanguage</value>
+			</list>
+		</property>
+	</bean>
+	
+	
+	<!-- 解析器注册 --><!--和 initbinder二选一  -->
+   <!--  <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+        <property name="messageConverters">
+            <list>
+                <ref bean="stringHttpMessageConverter" />
+            </list>
+        </property>
+    </bean> -->
+    <!-- String类型解析器，允许直接返回String类型的消息 -->
+    <!-- <bean id="stringHttpMessageConverter" class="org.springframework.http.converter.StringHttpMessageConverter">
+        <property name="supportedMediaTypes">
+            <list>
+                <value>text/html; charset=utf-8</value>
+            </list>
+        </property>
+    </bean> -->
+    
+    <!--i18n中的语言解析bean,有三种实现  -->
+    <!--1  -->
+    <!-- <bean id="localeResolver" class="org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver"></bean> -->
+    
+    <!--2  -->
+    <!--  <bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver"></bean> -->
+	<!--国际化操作拦截器(请求/session/cookie)则必须配置 -->
+	<!-- <mvc:interceptors> -->
+		<!-- <bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor"> -->
+			<!--通过这个参数来确定获取哪个配置，同页面?lang  -->
+			<!-- <property name="paramName" value="lang"/>
+			<property name="defaultLocale" value="zh_CN" /> -->
+			<!-- session有其自定义的超时时间，所以无需配置； -->
+		<!-- </bean>
+	</mvc:interceptors> -->
+	
+	<!--3  -->
+	<bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
+		  <!-- cookie变量的名称 -->
+          <property name="cookieName" value="lang" />
+          <!-- cookie超时时间 -->
+          <property name="cookieMaxAge" value="20" />
+          <!-- 默认使用简体中文 -->
+          <property name="defaultLocale" value="zh_CN" />
+	</bean>
+	<mvc:interceptors>
+		<bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+			<property name="paramName" value="lang"/>
+		</bean>
+	</mvc:interceptors>
+	
+	<!--文件上传配置  spring-->
+	<!-- <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize" value="2000000"/>
+	</bean> -->
+	
+	<!-- 文件上传多部份解析器 servlet -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.support.StandardServletMultipartResolver"></bean>
+
+</beans>

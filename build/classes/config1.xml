@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+       <!--xmlns ===>xml的默认命名空间(可以不使用前缀)  -->
+       <!--xmlns:xsi ===>使用xsi最为前缀的命名空间  -->
+       <!--xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"这一段是固定格式，遵守w3c的xml规范，并引入一个实例  -->
+       <!--xsi:schemaLocation ===>这个标志代表上面实例(XMLSchema-instance)中的一个schemaLocation属性 
+       		它定义了xml namespace和对应的xml schema definition(XSD)文档的位置关系,一般是两两对应的关系(beans<==>beans.xsd)
+       -->
+       <bean name="productNoArgs" class="example15_springframework.Product"/>
+       <bean name="productWithArgs" class="example15_springframework.Product">
+       		<property name="name" value="BMW"/>
+       		<property name="price" value="400000.47"/>
+       		<property name="weight" value="2000"/>
+       </bean>
+       <bean name="productConstructor" class="example15_springframework.Product">
+       		<constructor-arg name="name" value="Bens"/>
+       		<constructor-arg name="price" value="500000.46"/>
+       		<constructor-arg name="weight" value="2000"/>
+       </bean>
+       	<bean id="factoryMethodCreat" class="example15_springframework.Product" factory-method="createInstance"/>
+</beans>
